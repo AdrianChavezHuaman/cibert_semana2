@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caso: Seguridad en empresa tecnológica · ISO 27001 vs NIST CSF</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+  :root{
+    --page:#faf5ef;
+    --paper:#ffffff;
+    --ink:#3b2417;
+    --muted:#8a5a3b;
+    --border:#ecdcCB;
+
+    --brand:#8b5e34;
+    --brand-2:#b08968;
+    --brand-soft:#e6d3bd;
+    --brand-bg:#f7efe5;
+    --brand-bg2:#efe1cf;
+
+    --ok:#5c4033;
+    --warn:#b45309;
+    --warn-bg:#fdf3e3;
+    --warn-ink:#6b3d0f;
+
+    --arrow:#a89584;
+    --shadow:0 2px 8px rgba(59,36,23,.07);
+    --shadow-lg:0 14px 40px rgba(139,94,52,.20);
+  }
+
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(1000px 460px at 50% -220px, #eadbc8 0%, transparent 70%),
+      var(--page);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{max-width:1000px;margin:0 auto;padding:36px 20px 90px;}
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(135deg,#3b2417 0%,#8b5e34 55%,#b08968 100%);
+    color:#fff;border-radius:24px;padding:38px 36px;
+    box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
+  }
+  .hero::after{content:"";position:absolute;right:-70px;top:-70px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.12);}
+  .hero::before{content:"";position:absolute;right:80px;bottom:-90px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.08);}
+  .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#ecdcCB;margin-bottom:10px;}
+  .hero h1{font-size:2rem;line-height:1.15;letter-spacing:-.5px;margin-bottom:10px;}
+  .hero .sub{color:#ecdcCB;font-size:.98rem;max-width:680px;position:relative;z-index:1;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;list-style:none;position:relative;z-index:1;}
+  .chips li{
+    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);
+    padding:6px 13px;border-radius:999px;font-size:.83rem;font-weight:600;backdrop-filter:blur(4px);
+  }
+
+  /* FICHA */
+  .ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:24px;}
+  .ficha .item{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);}
+  .ficha .item h3{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;font-weight:700;}
+  .ficha .item p{font-size:.9rem;color:#4a2e1c;}
+
+  /* SECCIONES */
+  section{margin-top:44px;}
+  .sec-title{display:flex;align-items:center;gap:11px;font-size:1.18rem;letter-spacing:-.3px;margin-bottom:6px;}
+  .sec-title .bar{width:5px;height:22px;border-radius:3px;background:linear-gradient(var(--brand),var(--brand-2));}
+  .sec-desc{color:var(--muted);font-size:.9rem;margin-bottom:18px;}
+
+  /* TABLA */
+  .table-wrap{background:var(--paper);border:1px solid var(--border);border-radius:16px;overflow:auto;box-shadow:var(--shadow);}
+  table{width:100%;border-collapse:collapse;min-width:760px;font-size:.9rem;}
+  thead th{
+    background:var(--brand-bg2);text-align:left;padding:13px 15px;
+    font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;
+    color:#5b3a1f;font-weight:700;border-bottom:1px solid var(--brand-soft);white-space:nowrap;
+  }
+  tbody td{padding:13px 15px;border-bottom:1px solid #f3e8da;vertical-align:top;color:#4a2e1c;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:#fdfaf6;}
+  tbody tr:hover{background:var(--brand-bg);}
+  td.num{font-weight:800;color:var(--brand);width:52px;}
+
+  /* BADGES */
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.03em;}
+  .badge.alto{background:#fbe4d5;color:#8a2e08;}
+  .badge.medio{background:var(--warn-bg);color:var(--warn-ink);}
+  .badge.bajo{background:#e6efe0;color:#3f5a2a;}
+
+  /* TARJETAS DE MODELO */
+  .models{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .model-card{background:var(--paper);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .model-card::before{content:"";position:absolute;top:0;left:0;width:100%;height:6px;background:linear-gradient(90deg,var(--brand),var(--brand-2));}
+  .model-card h3{font-size:1.05rem;margin-bottom:4px;color:var(--ink);}
+  .model-card .tag{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;}
+  .model-card ul{margin-top:12px;padding-left:18px;font-size:.88rem;color:#4a2e1c;}
+  .model-card ul li{margin-bottom:6px;}
+  .model-card .picked{
+    margin-top:16px;padding:10px 14px;border-radius:10px;
+    background:var(--brand-bg);border-left:4px solid var(--brand);
+    font-size:.85rem;font-weight:600;color:#5b3a1f;
+  }
+
+  /* ARQUITECTURA SVG */
+  .arch-wrap{
+    background:var(--paper);border:1px solid var(--border);border-radius:20px;
+    padding:24px 14px;box-shadow:var(--shadow);overflow-x:auto;overflow-y:hidden;
+  }
+  .arch-svg{display:block;width:100%;height:auto;min-width:820px;font-family:inherit;}
+
+  /* COMPONENTES EN TARJETAS */
+  .components{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+  .comp{
+    background:var(--paper);border:1px solid var(--border);border-radius:16px;
+    padding:18px 20px;box-shadow:var(--shadow);border-left:5px solid var(--brand);
+  }
+  .comp h4{font-size:.92rem;margin-bottom:6px;color:var(--ink);}
+  .comp p{font-size:.85rem;color:#5b3a1f;}
+
+  /* CONCLUSIONES */
+  .concl{
+    background:linear-gradient(135deg,var(--brand-bg) 0%,var(--brand-bg2) 100%);
+    border:1px solid var(--brand-soft);border-radius:18px;padding:24px 26px;
+  }
+  .concl ul{padding-left:20px;font-size:.9rem;color:#4a2e1c;}
+  .concl ul li{margin-bottom:8px;}
+
+  footer{margin-top:56px;text-align:center;font-size:.8rem;color:var(--muted);border-top:1px solid var(--border);padding-top:22px;}
+
+  @media (max-width:720px){
+    .models{grid-template-columns:1fr;}
+    .hero{padding:28px 22px;border-radius:18px;}
+    .hero h1{font-size:1.5rem;}
+    .wrap{padding:22px 14px 60px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Gestión Estratégica de Proceso y Agilidad Empresarial · Semana 1</p>
+    <h1>Seguridad en una empresa tecnológica</h1>
+    <p class="sub">Caso de análisis: la organización permite <strong>acceso remoto sin controles claros</strong>, usa solo credenciales básicas y no cuenta con un modelo formal de seguridad para gestionar riesgos.</p>
+    <ul class="chips">
+      <li>🔓 Acceso remoto sin control</li>
+      <li>🧩 Sin segmentación de red</li>
+      <li>🔑 Contraseñas débiles</li>
+      <li>📜 Sin políticas formales</li>
+    </ul>
+  </header>
+
+  <div class="ficha">
+    <div class="item"><h3>Escenario</h3><p>Empresa tecnológica con acceso remoto a sistemas internos desde múltiples ubicaciones.</p></div>
+    <div class="item"><h3>Hallazgo clave</h3><p>TI identificó debilidades tras una revisión: no existe un modelo formal de seguridad.</p></div>
+    <div class="item"><h3>Objetivo</h3><p>Evaluar ISO 27001 vs NIST CSF y proponer una arquitectura de seguridad básica.</p></div>
+  </div>
+
+  <!-- PARTE 1: PROBLEMAS Y RIESGOS -->
+  <section>
+    <h2 class="sec-title"><span class="bar"></span>Parte 1 · Problemas y riesgos identificados</h2>
+    <p class="sec-desc">Relación entre cada debilidad detectada en la arquitectura actual y el riesgo de ciberseguridad asociado.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>N°</th><th>Problema detectado</th><th>Descripción</th><th>Riesgo asociado</th><th>Nivel</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="num">1</td>
+            <td><strong>Acceso remoto sin controles</strong></td>
+            <td>Empleados se conectan desde cualquier ubicación solo con usuario y contraseña.</td>
+            <td>Acceso no autorizado, robo de credenciales, movimiento lateral.</td>
+            <td><span class="badge alto">Alto</span></td>
+          </tr>
+          <tr>
+            <td class="num">2</td>
+            <td><strong>Ausencia de políticas formales</strong></td>
+            <td>No hay reglas escritas sobre uso de sistemas, contraseñas ni accesos.</td>
+            <td>Falta de gobernanza, incumplimiento normativo, sanciones.</td>
+            <td><span class="badge alto">Alto</span></td>
+          </tr>
+          <tr>
+            <td class="num">3</td>
+            <td><strong>Sin segmentación de red</strong></td>
+            <td>Todos los servicios comparten la misma red plana.</td>
+            <td>Propagación de malware, escalada de privilegios, caída total.</td>
+            <td><span class="badge alto">Alto</span></td>
+          </tr>
+          <tr>
+            <td class="num">4</td>
+            <td><strong>Contraseñas simples</strong></td>
+            <td>Usuarios eligen claves cortas y reutilizadas.</td>
+            <td>Ataques de fuerza bruta, phishing exitoso, suplantación.</td>
+            <td><span class="badge medio">Medio</span></td>
+          </tr>
+          <tr>
+            <td class="num">5</td>
+            <td><strong>Sin modelo formal de seguridad</strong></td>
+            <td>No existe marco para gestionar riesgos ni respuesta a incidentes.</td>
+            <td>Gestión reactiva, pérdida de información, daño reputacional.</td>
+            <td><span class="badge alto">Alto</span></td>
+          </tr>
+          <tr>
+            <td class="num">6</td>
+            <td><strong>Falta de monitoreo</strong></td>
+            <td>No se registran ni auditan accesos a sistemas críticos.</td>
+            <td>Detección tardía, imposibilidad de forense, incumplimiento.</td>
+            <td><span class="badge medio">Medio</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PARTE 2: COMPARATIVO DE MODELOS -->
+  <section>
+    <h2 class="sec-title"><span class="bar"></span>Parte 2 · Cuadro comparativo: ISO 27001 vs NIST CSF</h2>
+    <p class="sec-desc">Evaluación de los dos modelos de referencia propuestos por el docente para el caso.</p>
+
+    <div class="table-wrap" style="margin-bottom:22px;">
+      <table>
+        <thead>
+          <tr><th>Criterio</th><th>ISO/IEC 27001</th><th>NIST CSF</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Enfoque</strong></td><td>Sistema de Gestión de Seguridad de la Información (SGSI) certificable.</td><td>Marco de gestión de riesgos de ciberseguridad, no certificable.</td></tr>
+          <tr><td><strong>Estructura</strong></td><td>Basado en ciclos PDCA y controles del Anexo A.</td><td>Cinco funciones: Identificar, Proteger, Detectar, Responder, Recuperar.</td></tr>
+          <tr><td><strong>Orientación</strong></td><td>Normativa y de cumplimiento.</td><td>Operativa y de madurez.</td></tr>
+          <tr><td><strong>Flexibilidad</strong></td><td>Alta exigencia documental.</td><td>Alta adaptabilidad a cualquier tamaño.</td></tr>
+          <tr><td><strong>Certificación</strong></td><td>Sí, auditable por terceros.</td><td>No aplica certificación.</td></tr>
+          <tr><td><strong>Costo / tiempo</strong></td><td>Alto (implementación 6–18 meses).</td><td>Bajo / gradual (implementación por fases).</td></tr>
+          <tr><td><strong>Ideal para…</strong></td><td>Empresas que buscan cumplimiento formal y certificación.</td><td>Empresas que necesitan mejorar su postura rápidamente.</td></tr>
+          <tr><td><strong>Aplicación al caso</strong></td><td>Útil como marco formal a mediano plazo.</td><td><strong>Más adecuado</strong> para la situación actual.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="models">
+      <div class="model-card">
+        <span class="tag">Opción A</span>
+        <h3>ISO/IEC 27001</h3>
+        <ul>
+          <li>Requiere gran madurez organizacional.</li>
+          <li>Necesita documentación y auditoría continua.</li>
+          <li>Exige roles formales y comité de seguridad.</li>
+          <li>Ciclo de implementación largo y costoso.</li>
+        </ul>
+        <div class="picked">⚠️ Difícil de aplicar de inmediato por la falta de madurez actual.</div>
+      </div>
+
+      <div class="model-card">
+        <span class="tag">Opción B · Recomendada</span>
+        <h3>NIST CSF</h3>
+        <ul>
+          <li>Marco flexible y por fases.</li>
+          <li>Permite empezar con acciones concretas.</li>
+          <li>Alínea las 5 funciones con el ciclo de vida del riesgo.</li>
+          <li>Compatible con ISO 27001 a futuro.</li>
+        </ul>
+        <div class="picked">✅ Modelo seleccionado: se adapta a la urgencia y al contexto de la empresa.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTE 2: ARQUITECTURA PROPUESTA -->
+  <section>
+    <h2 class="sec-title"><span class="bar"></span>Arquitectura de seguridad propuesta</h2>
+    <p class="sec-desc">Componentes básicos organizados por capas, alineados a las funciones del NIST CSF.</p>
+
+    <div class="components" style="margin-bottom:24px;">
+      <div class="comp"><h4>👤 Identidad y acceso (IAM + MFA)</h4><p>Autenticación multifactor, roles por usuario, principio de mínimo privilegio y revisión periódica de cuentas.</p></div>
+      <div class="comp"><h4>🧱 Segmentación de red</h4><p>VLANs por servicio, DMZ para servidores expuestos, firewall perimetral y control de tráfico este-oeste.</p></div>
+      <div class="comp"><h4>🔐 Cifrado de datos</h4><p>Cifrado en tránsito (TLS) y en reposo, gestión de claves y protección de información sensible.</p></div>
+      <div class="comp"><h4>📜 Políticas y gobernanza</h4><p>Políticas de contraseñas, uso aceptable, gestión de incidentes y roles de seguridad definidos.</p></div>
+      <div class="comp"><h4>📡 Monitoreo y logs (SIEM)</h4><p>Registro centralizado de eventos, alertas y correlación de incidentes en tiempo real.</p></div>
+      <div class="comp"><h4>🛡️ Endpoint y antivirus</h4><p>Protección EDR en equipos, actualizaciones automáticas y control de dispositivos extraíbles.</p></div>
+      <div class="comp"><h4>🎓 Concientización del usuario</h4><p>Capacitación en phishing, contraseñas seguras y buenas prácticas de higiene digital.</p></div>
+      <div class="comp"><h4>🚨 Respuesta a incidentes</h4><p>Plan de respuesta, roles definidos, respaldo y recuperación (backups 3-2-1).</p></div>
+    </div>
+
+    <div class="arch-wrap">
+      <svg class="arch-svg" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#a89584"/>
+          </marker>
+          <filter id="softShadow2" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3b2417" flood-opacity="0.14"/>
+          </filter>
+        </defs>
+
+        <!-- Capa 1: Usuarios -->
+        <rect x="60" y="30" width="780" height="70" rx="14" fill="#f7efe5" stroke="#8b5e34" stroke-width="2" filter="url(#softShadow2)"/>
+        <text x="450" y="60" text-anchor="middle" font-size="15" font-weight="700" fill="#3b2417">Capa 1 · Usuarios remotos y presenciales</text>
+        <text x="450" y="82" text-anchor="middle" font-size="12.5" fill="#8a5a3b">Empleados · Proveedores · Administradores</text>
+
+        <line x1="450" y1="100" x2="450" y2="130" stroke="#a89584" stroke-width="2" marker-end="url(#ar2)"/>
+
+        <!-- Capa 2: Identidad y acceso -->
+        <rect x="140" y="130" width="620" height="70" rx="14" fill="#efe1cf" stroke="#8b5e34" stroke-width="2" filter="url(#softShadow2)"/>
+        <text x="450" y="160" text-anchor="middle" font-size="15" font-weight="700" fill="#3b2417">Capa 2 · Identidad y acceso</text>
+        <text x="450" y="182" text-anchor="middle" font-size="12.5" fill="#8a5a3b">IAM · MFA · Mínimo privilegio · VPN segura</text>
+
+        <line x1="450" y1="200" x2="450" y2="230" stroke="#a89584" stroke-width="2" marker-end="url(#ar2)"/>
+
+        <!-- Capa 3: Perímetro -->
+        <rect x="60" y="230" width="780" height="80" rx="14" fill="#fdf3e3" stroke="#b45309" stroke-width="2" filter="url(#softShadow2)"/>
+        <text x="450" y="262" text-anchor="middle" font-size="15" font-weight="700" fill="#6b3d0f">Capa 3 · Perímetro y segmentación</text>
+        <text x="450" y="284" text-anchor="middle" font-size="12.5" fill="#6b3d0f">Firewall · DMZ · VLANs · IDS/IPS · Filtrado de tráfico</text>
+
+        <line x1="450" y1="310" x2="450" y2="340" stroke="#a89584" stroke-width="2" marker-end="url(#ar2)"/>
+
+        <!-- Capa 4: Servicios internos -->
+        <rect x="60" y="340" width="380" height="90" rx="14" fill="#f7efe5" stroke="#8b5e34" stroke-width="2" filter="url(#softShadow2)"/>
+        <text x="250" y="372" text-anchor="middle" font-size="14" font-weight="700" fill="#3b2417">Servidores internos</text>
+        <text x="250" y="394" text-anchor="middle" font-size="12" fill="#8a5a3b">Aplicaciones · Base de datos</text>
+        <text x="250" y="414" text-anchor="middle" font-size="12" fill="#8a5a3b">Cifrado en reposo</text>
+
+        <rect x="460" y="340" width="380" height="90" rx="14" fill="#f7efe5" stroke="#8b5e34" stroke-width="2" filter="url(#softShadow2)"/>
+        <text x="650" y="372" text-anchor="middle" font-size="14" font-weight="700" fill="#3b2417">Servicios expuestos</text>
+        <text x="650" y="394" text-anchor="middle" font-size="12" fill="#8a5a3b">Web · API · Correo</text>
+        <text x="650" y="414" text-anchor="middle" font-size="12" fill="#8a5a3b">TLS / HTTPS obligatorio</text>
+
+        <line x1="450" y1="430" x2="450" y2="460" stroke="#a89584" stroke-width="2" marker-end="url(#ar2)"/>
+
+        <!-- Capa 5: Monitoreo y respuesta -->
+        <rect x="60" y="460" width="780" height="70" rx="14" fill="#efe1cf" stroke="#8b5e34" stroke-width="2" filter="url(#softShadow2)"/>
+        <text x="450" y="490" text-anchor="middle" font-size="15" font-weight="700" fill="#3b2417">Capa 5 · Monitoreo, respuesta y respaldo</text>
+        <text x="450" y="512" text-anchor="middle" font-size="12.5" fill="#8a5a3b">SIEM · Logs centralizados · Plan de respuesta · Backups 3-2-1</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- CONCLUSIONES -->
+  <section>
+    <h2 class="sec-title"><span class="bar"></span>Conclusiones del análisis</h2>
+    <div class="concl">
+      <ul>
+        <li>La empresa presenta <strong>debilidades estructurales</strong> que exponen su información y sus sistemas a riesgos altos.</li>
+        <li><strong>NIST CSF</strong> resulta el modelo más adecuado por su flexibilidad y su enfoque por fases, permitiendo mejoras rápidas sin esperar una certificación formal.</li>
+        <li>La <strong>arquitectura propuesta</strong> cubre identidad, red, cifrado, gobernanza, monitoreo y respuesta, cerrando las brechas identificadas.</li>
+        <li>A mediano plazo, la organización puede <strong>migrar hacia ISO 27001</strong> aprovechando la base construida con NIST CSF.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>Semana 1 · Gestión Estratégica de Proceso y Agilidad Empresarial · Caso de seguridad</footer>
+</div>
+</body>
+</html>
